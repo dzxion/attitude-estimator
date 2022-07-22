@@ -41,6 +41,14 @@ Fc_YawRate = data(15, :);
 fs = 250;
 gyro = ([Gyro_x;Gyro_y;Gyro_z]/32.8)*ToRad;
 acc = [Acc_x;Acc_y;Acc_z]/8192;
-qEstC = Comp_acc(fs,gyro,acc);
+acc_filted = Filter_LP_1(acc);
 
-rmpath('algorithm');
+qaccfilted = quat_acc(acc_filted);
+qacc = quat_acc(acc);
+[qEstC,biasC] = Comp_acc(fs,gyro,acc);
+
+euleracc = qua2eul(qacc)*ToDeg;
+eulerqEstC = qua2eul(qEstC)*ToDeg;
+euleraccfilted = qua2eul(qEstC)*ToDeg;
+
+% rmpath('algorithm','rotation');
